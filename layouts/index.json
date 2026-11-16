@@ -1,0 +1,28 @@
+{{- $posts := slice -}}
+{{- range (where .Site.RegularPages "Section" .Site.Params.contentTypeName) -}}
+  {{- $posts = $posts | append (dict
+      "title"   .Title
+      "date"    (.Date.Format "2006-01-02")
+      "summary" (.Summary | plainify | htmlUnescape | chomp)
+      "url"     .RelPermalink
+      "tags"    (.Params.tags | default slice)
+  ) -}}
+{{- end -}}
+{{- $pages := slice -}}
+{{- range (where .Site.RegularPages "Section" "") -}}
+  {{- $pages = $pages | append (dict "title" .Title "url" .RelPermalink) -}}
+{{- end -}}
+{{- $data := dict
+    "site"     (dict
+        "title"    .Site.Title
+        "subtitle" .Site.Params.subtitle
+        "author"   .Site.Params.Author
+        "baseURL"  .Site.BaseURL)
+    "about"    (.Site.Params.consoleAbout | default slice)
+    "skills"   (.Site.Params.skills | default slice)
+    "projects" (.Site.Params.projects | default slice)
+    "social"   (.Site.Params.social | default dict)
+    "pages"    $pages
+    "posts"    $posts
+-}}
+{{- $data | jsonify (dict "indent" "  ") -}}

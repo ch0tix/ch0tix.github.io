@@ -1,0 +1,85 @@
+# =============================================================================
+#  ch0tix.github.io  —  Hugo config
+#  Graphic theme: chringel (chringel21/chringel-hugo-theme)
+#  + custom interactive "console mode" (injected via layouts/_default/baseof.html)
+#  Edit the values marked  # EDIT  to make the site yours.
+# =============================================================================
+
+baseURL = "https://ch0tix.github.io/"
+languageCode = "en-us"
+theme = "chringel"
+title = "ch0tix"                                   # EDIT: site title
+author = "ch0tix"                                  # EDIT
+copyright = "© {year} ch0tix"
+paginate = 10
+enableEmoji = true
+
+# Home page also emits /index.json  -> consumed by the interactive console
+[outputs]
+  home = ["HTML", "RSS", "JSON"]
+
+[markup]
+  [markup.goldmark.renderer]
+    unsafe = true                                  # allow raw HTML in markdown
+  [markup.highlight]
+    style = "dracula"
+    noClasses = true
+
+# writeStats lets Tailwind purge correctly if you ever rebuild the theme CSS
+[build]
+  writeStats = true
+
+[params]
+  name = "ch0tix"                                  # EDIT
+  description = "Computer-science engineer & security researcher — writeups, research, tooling."  # EDIT
+  # Terminal-style prompt shown as the logo in the top-left header
+  headerTitle = "ch0tix@sec:~/$"                   # EDIT
+  footerCopyrightText = "ch0tix {year} · built with Hugo"
+  showPrevNextPostNavigation = true
+  recentpostsonindex = true
+  dateFormat = "Jan 2, 2006"
+  # titleimage = "images/avatar.png"               # EDIT: drop an avatar in assets/images/ and uncomment
+
+  # ---- console-mode data (single source of truth, also drives the GUI) -----
+  contentTypeName = "blog"       # content section the console lists as "posts"
+
+  consoleAbout = [
+    "I'm ch0tix — a computer-science engineer and security researcher.",
+    "I build software and break it: reverse engineering, exploit dev,",
+    "application & infrastructure security, and the occasional CTF.",
+    "",
+    "This site has two faces: the graphic blog you're (maybe) looking at,",
+    "and this console. Type `gui` to go back, `help` to see commands.",
+  ]
+
+  skills = [
+    "Security      :: pentesting, reverse engineering, exploit dev, threat modeling",
+    "Languages     :: C/C++, Python, Go, Rust, JavaScript, Bash",
+    "Reversing     :: Ghidra, IDA, gdb/pwndbg, radare2, Frida",
+    "Offense       :: Burp Suite, Metasploit, nmap, Wireshark, custom tooling",
+    "Infra / Dev   :: Linux, Docker, CI/CD, cloud security",
+  ]
+
+  [[params.projects]]
+    name = "example-project"
+    desc = "Replace these with your real projects (edit hugo.toml -> params.projects)."
+    url  = "https://github.com/ch0tix"
+  [[params.projects]]
+    name = "ctf-writeups"
+    desc = "Writeups and tooling from CTF competitions."
+    url  = "https://github.com/ch0tix"
+
+  # social links (shown in console `social`; GitHub/Twitter also show on the home page)
+  [params.social]
+    github   = "https://github.com/ch0tix"         # EDIT
+    twitter  = "https://twitter.com/ch0tix"        # EDIT (or remove)
+    linkedin = ""                                   # EDIT (or leave empty)
+    email    = "christiancotignola@gmail.com"      # EDIT (or remove)
+
+# Social icons on the home page (uses Ionicons: logo-github, logo-twitter, ...)
+[[menu.social]]
+  name = "GitHub"
+  url = "https://github.com/ch0tix"                # EDIT
+[[menu.social]]
+  name = "Twitter"
+  url = "https://twitter.com/ch0tix"               # EDIT (or remove this block)

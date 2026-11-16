@@ -1,0 +1,36 @@
+{{- /* Site-level override of chringel's site-schema.html.
+       The theme version emits invalid JSON-LD when favicons/images/cover are
+       unset (trailing commas, unquoted values), which --minify rejects.
+       This builds the schema as a map and jsonify's it, so it is always valid. */ -}}
+{{- if .IsHome -}}
+  {{- $schema := dict
+      "@context"    "https://schema.org"
+      "@type"       "WebSite"
+      "name"        .Site.Title
+      "url"         .Site.BaseURL
+      "description" (.Site.Params.description | default "")
+      "license"     (.Site.Copyright | default "")
+  -}}
+  <script type="application/ld+json">{{ $schema | jsonify }}</script>
+{{- else if .IsPage -}}
+  {{- $author := or .Params.author .Site.Params.author .Site.Title -}}
+  {{- $desc := cond (ne (string .Description) "") .Description (.Summary | plainify | chomp) -}}
+  {{- $schema := dict
+      "@context"         "https://schema.org"
+      "@type"            "BlogPosting"
+      "headline"         .Title
+      "name"             .Title
+      "articleSection"   .Section
+      "description"      $desc
+      "inLanguage"       (.Site.LanguageCode | default "en-us")
+      "mainEntityOfPage" (dict "@type" "WebPage" "@id" .Permalink)
+      "author"           (dict "@type" "Person" "name" $author)
+      "publisher"        (dict "@type" "Organization" "name" .Site.Title "url" .Site.BaseURL)
+      "datePublished"    (.PublishDate.Format "2006-01-02T15:04:05Z07:00")
+      "dateModified"     (.Lastmod.Format "2006-01-02T15:04:05Z07:00")
+      "url"              .Permalink
+      "wordCount"        .WordCount
+      "keywords"         (.Params.tags | default slice)
+  -}}
+  <script type="application/ld+json">{{ $schema | jsonify }}</script>
+{{- end -}}

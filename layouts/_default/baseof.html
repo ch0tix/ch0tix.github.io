@@ -1,0 +1,46 @@
+{{- /* Site-level override of the chringel theme's baseof.
+       Identical to the theme's layout, plus the custom interactive console
+       (overlay + toggle button + assets) injected on every page. */ -}}
+<!DOCTYPE html>
+<html lang="{{ .Site.LanguageCode }}">
+  {{ partial "head.html" . }}
+  <body class="flex flex-col min-h-screen dark:bg-gray-900">
+    {{- /* Apply console mode before the page is drawn if it was last used */ -}}
+    <script>
+      try {
+        if (localStorage.getItem("site-mode") === "console") {
+          document.documentElement.classList.add("console-active");
+        }
+      } catch (e) {}
+    </script>
+    {{- partial "dev-size-indicator.html" . -}}
+    {{- partial "header.html" . -}}
+    <main class="flex-1 mx-4 md:mx-12 lg:mx-24 mt-4 sm:mt-16">
+      {{- block "main" . }}{{- end }}
+    </main>
+    {{- partial "dev-parameters.html" . -}}
+    {{- partial "footer.html" . -}}
+
+    {{- /* ----- interactive console mode (custom) ----- */ -}}
+    <link rel="stylesheet" href="{{ "console.css" | absURL }}" />
+    <button id="console-toggle" type="button" aria-label="Open console" title="Open console (`)">
+      <span>&gt;_</span> console
+    </button>
+    <div id="console-overlay" role="dialog" aria-label="Interactive console" aria-hidden="true">
+      <div id="console-window">
+        <div id="console-bar">
+          <span class="console-dot red"></span><span class="console-dot yellow"></span><span class="console-dot green"></span>
+          <span id="console-title">ch0tix@web — /bin/sh</span>
+          <button id="console-close" type="button" aria-label="Close console (exit)">&times;</button>
+        </div>
+        <div id="console-output" aria-live="polite"></div>
+        <div id="console-inputline">
+          <span id="console-prompt"></span>
+          <input id="console-input" type="text" autocomplete="off" autocapitalize="off"
+                 autocorrect="off" spellcheck="false" aria-label="console input" />
+        </div>
+      </div>
+    </div>
+    <script src="{{ "console.js" | absURL }}" data-base="{{ "index.json" | absURL }}" defer></script>
+  </body>
+</html>

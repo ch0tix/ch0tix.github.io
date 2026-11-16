@@ -1,0 +1,159 @@
+/* =========================================================================
+   Interactive console mode  —  ch0tix.github.io
+   A full-screen terminal overlay that sits on top of the graphic site.
+   ========================================================================= */
+
+:root {
+  --con-bg:        #0c0f0c;
+  --con-window:    #111511;
+  --con-bar:       #1b211b;
+  --con-text:      #c9d6c9;
+  --con-dim:       #6f7f6f;
+  --con-accent:    #38e08a;   /* prompt / highlights */
+  --con-accent-2:  #ffb454;   /* commands / links    */
+  --con-error:     #ff6b6b;
+  --con-border:    #223022;
+  --con-font: "SFMono-Regular", "JetBrains Mono", "Fira Code", Menlo,
+              Consolas, "DejaVu Sans Mono", monospace;
+}
+
+/* ---- floating toggle button (graphic mode) ---------------------------- */
+#console-toggle {
+  position: fixed;
+  right: 1rem;
+  bottom: 1rem;
+  z-index: 9998;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-family: var(--con-font);
+  font-size: 0.85rem;
+  color: var(--con-accent);
+  background: var(--con-window);
+  border: 1px solid var(--con-border);
+  border-radius: 6px;
+  padding: 0.5rem 0.8rem;
+  cursor: pointer;
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.45);
+  transition: transform 0.12s ease, box-shadow 0.12s ease, border-color 0.12s ease;
+}
+#console-toggle span { font-weight: 700; }
+#console-toggle:hover {
+  transform: translateY(-2px);
+  border-color: var(--con-accent);
+  box-shadow: 0 6px 22px rgba(56, 224, 138, 0.25);
+}
+
+/* ---- overlay ---------------------------------------------------------- */
+#console-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: rgba(0, 0, 0, 0.55);
+  backdrop-filter: blur(2px);
+  padding: clamp(0px, 3vw, 48px);
+}
+
+/* when active: show overlay, hide toggle, lock scroll */
+html.console-active { overflow: hidden; }
+html.console-active #console-overlay { display: flex; }
+html.console-active #console-toggle { display: none; }
+
+/* ---- window ----------------------------------------------------------- */
+#console-window {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 980px;
+  height: 100%;
+  margin: auto;
+  background: var(--con-bg);
+  border: 1px solid var(--con-border);
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
+  font-family: var(--con-font);
+}
+
+#console-bar {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.6rem 0.9rem;
+  background: var(--con-bar);
+  border-bottom: 1px solid var(--con-border);
+  user-select: none;
+}
+.console-dot { width: 12px; height: 12px; border-radius: 50%; display: inline-block; }
+.console-dot.red    { background: #ff5f56; }
+.console-dot.yellow { background: #ffbd2e; }
+.console-dot.green  { background: #27c93f; }
+#console-title {
+  flex: 1;
+  text-align: center;
+  color: var(--con-dim);
+  font-size: 0.8rem;
+  letter-spacing: 0.03em;
+}
+#console-close {
+  background: none;
+  border: none;
+  color: var(--con-dim);
+  font-size: 1.3rem;
+  line-height: 1;
+  cursor: pointer;
+  padding: 0 0.2rem;
+}
+#console-close:hover { color: var(--con-error); }
+
+/* ---- output area ------------------------------------------------------ */
+#console-output {
+  flex: 1;
+  overflow-y: auto;
+  padding: 1rem 1.1rem 0.4rem;
+  color: var(--con-text);
+  font-size: 0.92rem;
+  line-height: 1.5;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+#console-output a { color: var(--con-accent-2); text-decoration: none; }
+#console-output a:hover { text-decoration: underline; }
+
+#console-output .c-accent   { color: var(--con-accent); }
+#console-output .c-cmd      { color: var(--con-accent-2); font-weight: 600; }
+#console-output .c-dim      { color: var(--con-dim); }
+#console-output .c-error    { color: var(--con-error); }
+#console-output .c-banner   { color: var(--con-accent); display: block; line-height: 1.1;
+                              white-space: pre; overflow-x: auto; max-width: 100%; }
+#console-output .c-prompt   { color: var(--con-accent); }
+#console-output .c-echo     { color: var(--con-text); }
+#console-output .c-row      { display: block; }
+#console-output .c-table    { display: grid; grid-template-columns: auto 1fr; gap: 0 1.2rem; }
+
+/* ---- input line ------------------------------------------------------- */
+#console-inputline {
+  display: flex;
+  align-items: center;
+  padding: 0.4rem 1.1rem 1rem;
+  gap: 0.5rem;
+}
+#console-prompt { color: var(--con-accent); white-space: nowrap; }
+#console-input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  outline: none;
+  color: var(--con-text);
+  font-family: var(--con-font);
+  font-size: 0.92rem;
+  caret-color: var(--con-accent);
+}
+
+/* reduced motion friendly blink via caret only; no animated elements */
+@media (max-width: 600px) {
+  #console-overlay { padding: 0; }
+  #console-window { border-radius: 0; }
+  #console-output, #console-input, #console-inputline { font-size: 0.86rem; }
+}
