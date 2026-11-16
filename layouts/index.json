@@ -16,8 +16,9 @@
     "site"     (dict
         "title"    .Site.Title
         "subtitle" .Site.Params.subtitle
-        "author"   .Site.Params.Author
-        "baseURL"  .Site.BaseURL)
+        "author"   (.Site.Params.Author | default .Site.Params.name | default .Site.Title)
+        "baseURL"  .Site.BaseURL
+        "postsUrl" (relURL (printf "%s/" .Site.Params.contentTypeName)))
     "about"    (.Site.Params.consoleAbout | default slice)
     "skills"   (.Site.Params.skills | default slice)
     "projects" (.Site.Params.projects | default slice)

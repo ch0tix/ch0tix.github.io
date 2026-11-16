@@ -1,5 +1,5 @@
 ---
-title: "about"
+title: "me"
 author: "ch0tix"
 date: 2026-11-16
 description: "Who ch0tix is — engineer and security researcher."
@@ -23,11 +23,11 @@ CTF competitions when there's time.
 ### this site
 
 It runs in two modes. The one you're reading now is the **graphic** blog.
-There's also a **console** mode — click the `>_ console` button (bottom-right),
-hit the backtick `` ` `` key, or use the `console_` menu item, then type
-`help`. Everything on the site is reachable from the command line.
+There's also a full-screen **console** mode — select **`/console`** in the menu
+(top-right) and type `help`. Everything on the site is reachable from the command
+line; type `gui` or press `Esc` to come back.
 
-> _Edit this page in `content/about.md` and your details in `hugo.toml`._
+> _Edit this page in `content/me.md` and your details in `hugo.toml`._
 
 ### elsewhere
 
